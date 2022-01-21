@@ -1,0 +1,32 @@
+
+* gas
+
+gas is a tool that allows writing [[https://developer.apple.com/library/archive/documentation/LanguagesUtilities/Conceptual/MacAutomationScriptingGuide/][Mac Scripting]] applications with [[https://github.com/aconchillo/guilescript][GuileScript]].
+
+This project is in a very primitive state since it depends on GuileScript which
+is totally a work-in-progress. I actually started GuileScript in order to be
+able to create gas after seeing [[https://twitter.com/zaneshelby/status/1477988369154121734?s=20][obb]], a very cool ClojureScript project.
+
+* Installation
+
+You can clone the repo and run:
+
+#+BEGIN_EXAMPLE
+$ make install
+#+END_EXAMPLE
+
+But it's probably better if you install it through [[https://github.com/aconchillo/homebrew-guile][Guile Homebrew]]:
+
+#+BEGIN_EXAMPLE
+$ brew install aconchillo/guile/gas
+#+END_EXAMPLE
+
+* Examples
+
+There's only one example right now:
+
+#+BEGIN_EXAMPLE
+$ gas examples/choices.gs
+#+END_EXAMPLE
+
+[[./gas.gif]]

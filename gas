@@ -1,0 +1,59 @@
+#!/bin/sh
+# -*-scheme-*-
+exec guile -e "(@@ (gas) main)" -s "$0" "$@"
+!#
+
+;;; (gas) --- Guile/Apple/Script
+
+;; Copyright (C) 2022 Aleix Conchillo Flaque <aconchillo@gmail.com>
+;;
+;; This file is part of gas.
+;;
+;; gas is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; gas is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with gas. If not, see https://www.gnu.org/licenses/.
+
+;;; Commentary:
+
+;; Guile/Apple/Script
+
+;;; Code:
+
+(define-module (gas)
+  #:use-module (ice-9 match)
+  #:use-module (ice-9 popen)
+  #:use-module (ice-9 textual-ports)
+  #:use-module (language guilescript compile))
+
+(define (compile-gas filename)
+  (let ((js (compile-file filename))
+        (port (mkstemp "/tmp/gas-XXXXXX")))
+    (chmod port #o700)
+    (put-string
+     port
+     (string-append "#!/usr/bin/osascript -l JavaScript\n\n" js))
+    port))
+
+(define (run-gas filename)
+  (let* ((port (compile-gas filename))
+         (tmpfile (port-filename port)))
+    (close-port port)
+    (system tmpfile)
+    (delete-file tmpfile)))
+
+(define main
+  (match-lambda
+    ((_)
+     (display "Usage: gas filename.gs")
+     (newline)
+     (exit 1))
+    ((_ filename) (run-gas filename))))
