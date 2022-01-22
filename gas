@@ -34,26 +34,28 @@ exec guile -e "(@@ (gas) main)" -s "$0" "$@"
   #:use-module (ice-9 textual-ports)
   #:use-module (language guilescript compile))
 
-(define (compile-gas filename)
-  (let ((js (compile-file filename))
-        (port (mkstemp "/tmp/gas-XXXXXX")))
+(define (run-osascript js)
+  (let* ((port (mkstemp "/tmp/gas-XXXXXX"))
+         (tmpfile (port-filename port)))
     (chmod port #o700)
     (put-string
      port
      (string-append "#!/usr/bin/osascript -l JavaScript\n\n" js))
-    port))
-
-(define (run-gas filename)
-  (let* ((port (compile-gas filename))
-         (tmpfile (port-filename port)))
     (close-port port)
     (system tmpfile)
     (delete-file tmpfile)))
 
+(define (run-string str)
+  (run-osascript (compile (call-with-input-string str read-syntax))))
+
+(define (run-file filename)
+  (run-osascript (compile-file filename)))
+
 (define main
   (match-lambda
+    ((_ "-e" str) (run-string str))
+    ((_ filename) (run-file filename))
     ((_)
      (display "Usage: gas filename.gs")
      (newline)
-     (exit 1))
-    ((_ filename) (run-gas filename))))
+     (exit 1))))
