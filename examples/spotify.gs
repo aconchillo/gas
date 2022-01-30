@@ -2,6 +2,10 @@
 
 (define spotify (Application "Spotify"))
 
-(.playpause spotify)
+(js-invoke spotify playpause)
 
-(log:info (.name (.currentTrack spotify)) "by" (.artist (.currentTrack spotify)))
+(define currentTrack (js-invoke spotify currentTrack))
+(define name (js-invoke currentTrack name))
+(define artist (js-invoke currentTrack artist))
+
+(console-log name "by" artist)
