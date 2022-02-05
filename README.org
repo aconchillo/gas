@@ -7,6 +7,8 @@ This project is in a very primitive state since it depends on GuileScript which
 is totally a work-in-progress. I actually started GuileScript in order to be
 able to create gas after seeing [[https://twitter.com/zaneshelby/status/1477988369154121734?s=20][obb]], a very cool ClojureScript project.
 
+[[./gas.gif]]
+
 * Installation
 
 You can clone the repo and run:
@@ -23,10 +25,25 @@ $ brew install aconchillo/guile/gas
 
 * Examples
 
-There's only one example right now:
+There's only a couple of examples right now, you can try:
 
 #+BEGIN_EXAMPLE
 $ gas examples/choices.gs
 #+END_EXAMPLE
 
-[[./gas.gif]]
+* Running things from the command line
+
+It is also possible to evaluate simple code from the command line. For example,
+you can play and pause your Spotify app with this:
+
+#+BEGIN_EXAMPLE
+$ gas -e '(js-invoke (Application "Spotify") playpause)
+#+END_EXAMPLE
+
+* Creating a macOS app
+
+Another sweet thing you can do is create a macOS app:
+
+#+BEGIN_EXAMPLE
+$ gas -a Choices.app examples/choices.gs
+#+END_EXAMPLE

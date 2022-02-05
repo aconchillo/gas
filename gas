@@ -34,7 +34,10 @@ exec guile -e "(@@ (gas) main)" -s "$0" "$@"
   #:use-module (ice-9 textual-ports)
   #:use-module (language guilescript compile))
 
-(define (run-osascript js)
+(define *guile-logo-icns* "/usr/local/share/gas/guile.icns")
+(define *applet-icns* "Contents/Resources/applet.icns")
+
+(define (create-osascript-file js)
   (let* ((port (mkstemp "/tmp/gas-XXXXXX"))
          (tmpfile (port-filename port)))
     (chmod port #o700)
@@ -42,7 +45,19 @@ exec guile -e "(@@ (gas) main)" -s "$0" "$@"
      port
      (string-append "#!/usr/bin/osascript -l JavaScript\n\n" js))
     (close-port port)
+    tmpfile))
+
+(define (run-osascript js)
+  (let* ((tmpfile (create-osascript-file js)))
     (system tmpfile)
+    (delete-file tmpfile)))
+
+(define (create-osascript-app app-name filename)
+  (let* ((js (compile-file filename))
+         (tmpfile (create-osascript-file js)))
+    (system (format #f "osacompile -l JavaScript -o ~a ~a" app-name tmpfile))
+    (when (file-exists? *guile-logo-icns*)
+      (copy-file *guile-logo-icns* (format #f "~a/~a" app-name *applet-icns*)))
     (delete-file tmpfile)))
 
 (define (run-string str)
@@ -54,6 +69,7 @@ exec guile -e "(@@ (gas) main)" -s "$0" "$@"
 (define main
   (match-lambda
     ((_ "-e" str) (run-string str))
+    ((_ "-a" app-name filename) (create-osascript-app app-name filename))
     ((_ filename) (run-file filename))
     ((_)
      (display "Usage: gas filename.gs")

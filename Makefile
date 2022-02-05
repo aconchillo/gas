@@ -24,6 +24,8 @@ install:
 	chmod +x gas
 	install -d '$(DESTDIR)/bin'
 	install -c gas '$(DESTDIR)/bin'
+	install -d '$(DESTDIR)/share/gas'
+	install -c share/guile.icns '$(DESTDIR)/share/gas'
 
 uninstall:
 	rm -f '$(DESTDIR)/bin/gas'
