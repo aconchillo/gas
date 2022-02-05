@@ -2,8 +2,8 @@
 
 (define choices #("Bread" "Pudding" "Cake"))
 
-(define app (js-invoke Application currentApplication))
+(define app (js-invoke Application 'currentApplication))
 
-(js-set! app includeStandardAdditions #t)
+(js-set! app 'includeStandardAdditions #t)
 
-(js-invoke app chooseFromList choices)
+(js-invoke app 'chooseFromList choices)

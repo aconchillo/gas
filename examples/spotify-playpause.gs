@@ -2,4 +2,4 @@
 
 (define spotify (Application "Spotify"))
 
-(js-invoke spotify playpause)
+(js-invoke spotify 'playpause)
