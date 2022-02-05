@@ -1,6 +1,9 @@
-* Version 0.1.0 (??, 2022)
 
-  - Added trivial Spotify example.
+* Version 0.1.0 (Feb 4, 2022)
+
+  - Add support for creating application bundles.
+
+  - Added trivial Spotify examples.
 
   - You can now evaluate code with `-e` argument.
 
