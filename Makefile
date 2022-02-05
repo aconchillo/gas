@@ -29,3 +29,4 @@ install:
 
 uninstall:
 	rm -f '$(DESTDIR)/bin/gas'
+	rm -f '$(DESTDIR)/share/gas'
