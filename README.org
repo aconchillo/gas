@@ -47,3 +47,5 @@ Another sweet thing you can do is create a macOS app:
 #+BEGIN_EXAMPLE
 $ gas -a Choices.app examples/choices.gs
 #+END_EXAMPLE
+
+[[./gas-app.gif]]
